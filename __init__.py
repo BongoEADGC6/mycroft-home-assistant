@@ -17,6 +17,7 @@ class HomeAssistantClient(object):
     def __init__(self, host, password, port=8123, ssl=False):
         self.ssl = ssl
         if self.ssl:
+            port=443
             self.url = "https://%s:%d" % (host, port)
         else:
             self.url = "http://%s:%d" % (host, port)
@@ -27,7 +28,7 @@ class HomeAssistantClient(object):
 
     def find_entity(self, entity, types):
         if self.ssl:
-            req = get("%s/api/states" % self.url, headers=self.headers, verify=False)
+            req = get("%s/api/states" % self.url, headers=self.headers, verify=True)
         else:
             req = get("%s/api/states" % self.url, headers=self.headers)
 
@@ -52,7 +53,7 @@ class HomeAssistantClient(object):
 
     def execute_service(self, domain, service, data):
         if self.ssl:
-            post("%s/api/services/%s/%s" % (self.url, domain, service), headers=self.headers, data=json.dumps(data), verify=False)
+            post("%s/api/services/%s/%s" % (self.url, domain, service), headers=self.headers, data=json.dumps(data), verify=True)
         else:
             post("%s/api/services/%s/%s" % (self.url, domain, service), headers=self.headers, data=json.dumps(data))
 
@@ -78,7 +79,7 @@ class HomeAssistantSkill(MycroftSkill):
         action = message.data["Action"]
         LOGGER.debug("Entity: %s" % entity)
         LOGGER.debug("Action: %s" % action)
-        ha_entity = self.ha.find_entity(entity, ['light', 'switch', 'scene', 'input_boolean'])
+        ha_entity = self.ha.find_entity(entity, ['group','light', 'switch', 'scene', 'input_boolean'])
         if ha_entity is None:
             #self.speak("Sorry, I can't find the Home Assistant entity %s" % entity)
             self.speak_dialog('homeassistant.device.unknown', data={"dev_name": ha_entity['dev_name']})
