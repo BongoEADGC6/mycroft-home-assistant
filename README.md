@@ -1,6 +1,8 @@
 
 # Home Assistant Skill for Mycroft
 
+Due to my lack of time, this project has been taken up by https://github.com/btotharye/mycroft-homeassistant and is now the upstream repo. 
+
 This is a skill to add [Home Assistant](https://home-assistant.io) support to
 [Mycroft](https://mycroft.ai). Currently is supports turning on and off several
 entity types (`light`, `switch`, `scene` and `input_boolean`).
